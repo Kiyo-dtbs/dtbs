@@ -1,32 +1,23 @@
-(async () => {
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get('id');
-  const status = document.getElementById('status');
+fetch("database.json")
+  .then(res => res.json())
+  .then(data => {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+    const entry = data[id];
 
-  if (!id) {
-    status.innerText = "Missing ?id= in the URL";
-    return;
-  }
-
-  try {
-    const res = await fetch('database.json');
-    const data = await res.json();
-
-    if (!data[id]) {
-      status.innerText = "ID not found.";
+    if (!entry) {
+      document.getElementById("status").textContent = "Invalid ID.";
       return;
     }
 
-    const item = data[id];
-
-    if (item.type === "file" || item.type === "link") {
-      window.location.href = item.url;
-    } else if (item.type === "text") {
-      status.innerText = item.url;
+    if (entry.type === "link") {
+      window.location.href = entry.url;
+    } else if (entry.type === "text") {
+      const decoded = atob(entry.url);
+      document.body.innerHTML = `<pre>${decoded}</pre>`;
+    } else if (entry.type === "file") {
+      window.location.href = entry.url;
     } else {
-      status.innerText = "Unknown type.";
+      document.getElementById("status").textContent = "Unknown type.";
     }
-  } catch (err) {
-    status.innerText = "Failed to fetch database.";
-  }
-})();
+  });
