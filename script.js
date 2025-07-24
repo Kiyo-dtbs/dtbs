@@ -1,26 +1,27 @@
-const target = window.location.pathname.slice(1);
+(async () => {
+  const status = document.getElementById("status");
+  const path = window.location.pathname.replace("/", "").toLowerCase();
 
-fetch("/database.json")
-  .then((res) => res.json())
-  .then((data) => {
-    const entry = data[target];
+  try {
+    const response = await fetch("database.json");
+    const data = await response.json();
 
-    if (!entry) {
-      document.getElementById("status").innerText = "404: Not Found";
+    if (!data[path]) {
+      status.innerText = "Not Found.";
       return;
     }
 
-    if (entry.type === "link") {
-      window.location.href = entry.content;
-    } else if (entry.type === "text") {
-      document.body.innerHTML = `<pre>${entry.content}</pre>`;
-    } else if (entry.type === "message") {
-      document.body.innerHTML = `<h2>${entry.content}</h2>`;
+    const item = data[path];
+
+    if (item.type === "link") {
+      window.location.href = item.content;
+    } else if (item.type === "text" || item.type === "message") {
+      status.innerText = item.content;
     } else {
-      document.body.innerHTML = `<h2>Unknown content type.</h2>`;
+      status.innerText = "Unsupported type.";
     }
-  })
-  .catch((err) => {
-    document.getElementById("status").innerText = "Error loading database.";
-    console.error("Error:", err);
-  });
+  } catch (err) {
+    status.innerText = "Error loading content.";
+    console.error(err);
+  }
+})();
