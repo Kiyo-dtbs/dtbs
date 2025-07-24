@@ -6,7 +6,7 @@
   <script>
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.onkeydown = function(e) {
-      if (e.key === "F12" || e.ctrlKey && (e.key === 'u' || e.key === 's' || e.key === 'Shift' || e.key === 'i' || e.key === 'j')) {
+      if (e.key === "F12" || (e.ctrlKey && ['u', 's', 'Shift', 'i', 'j'].includes(e.key))) {
         return false;
       }
     };
