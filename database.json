@@ -1,0 +1,18 @@
+{
+  "krnl": {
+    "type": "link",
+    "content": "https://krnl.cat/downloads"
+  },
+  "delta": {
+    "type": "link",
+    "content": "https://deltaexploits.gg/delta-executor-android"
+  },
+  "lunor": {
+    "type": "text",
+    "content": "loadstring(game:HttpGet(\"https://lunor.dev/loader\"))()"
+  },
+  "stopbypass": {
+    "type": "message",
+    "content": "Stop Bypassing"
+  }
+}
