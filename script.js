@@ -1,23 +1,28 @@
-fetch("database.json")
-  .then(res => res.json())
-  .then(data => {
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get("id");
-    const entry = data[id];
+// script.js
+const params = new URLSearchParams(window.location.search);
+const target = window.location.pathname.slice(1); // gets the path after slash
+
+fetch("/database.json")
+  .then((response) => response.json())
+  .then((data) => {
+    const entry = data[target];
 
     if (!entry) {
-      document.getElementById("status").textContent = "Invalid ID.";
+      document.getElementById("status").innerText = "404: Not Found";
       return;
     }
 
     if (entry.type === "link") {
-      window.location.href = entry.url;
+      window.location.href = entry.content;
     } else if (entry.type === "text") {
-      const decoded = atob(entry.url);
-      document.body.innerHTML = `<pre>${decoded}</pre>`;
-    } else if (entry.type === "file") {
-      window.location.href = entry.url;
+      document.body.innerHTML = `<pre>${entry.content}</pre>`;
+    } else if (entry.type === "message") {
+      document.body.innerHTML = `<h2>${entry.content}</h2>`;
     } else {
-      document.getElementById("status").textContent = "Unknown type.";
+      document.body.innerHTML = `<h2>Unknown content type.</h2>`;
     }
+  })
+  .catch((error) => {
+    document.getElementById("status").innerText = "Error loading content.";
+    console.error("Error loading database:", error);
   });
