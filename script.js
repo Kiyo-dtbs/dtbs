@@ -1,9 +1,7 @@
-// script.js
-const params = new URLSearchParams(window.location.search);
-const target = window.location.pathname.slice(1); // gets the path after slash
+const target = window.location.pathname.slice(1);
 
 fetch("/database.json")
-  .then((response) => response.json())
+  .then((res) => res.json())
   .then((data) => {
     const entry = data[target];
 
@@ -22,7 +20,7 @@ fetch("/database.json")
       document.body.innerHTML = `<h2>Unknown content type.</h2>`;
     }
   })
-  .catch((error) => {
-    document.getElementById("status").innerText = "Error loading content.";
-    console.error("Error loading database:", error);
+  .catch((err) => {
+    document.getElementById("status").innerText = "Error loading database.";
+    console.error("Error:", err);
   });
